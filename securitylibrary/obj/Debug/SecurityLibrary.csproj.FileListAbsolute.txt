@@ -12,3 +12,9 @@ D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityL
 D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csprojResolveAssemblyReference.cache
 D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.dll
 D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
+E:\HassanCourses\Security-Algorithms\SecurityLibrary\bin\Debug\SecurityLibrary.dll
+E:\HassanCourses\Security-Algorithms\SecurityLibrary\bin\Debug\SecurityLibrary.pdb
+E:\HassanCourses\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.csprojAssemblyReference.cache
+E:\HassanCourses\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.CoreCompileInputs.cache
+E:\HassanCourses\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.dll
+E:\HassanCourses\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
