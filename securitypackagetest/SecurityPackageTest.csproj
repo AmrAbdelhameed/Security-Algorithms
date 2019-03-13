@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="HillCipherTest.cs" />
     <Compile Include="PlayfairTest.cs" />
     <Compile Include="MonoalphabeticTest.cs" />
     <Compile Include="CeaserTest.cs" />
