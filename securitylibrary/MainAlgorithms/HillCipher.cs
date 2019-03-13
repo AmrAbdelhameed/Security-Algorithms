@@ -86,50 +86,96 @@ namespace SecurityLibrary
                 return a;
             return gcd(b, a % b);
         }
-        private List<List<int>> getInverseion(List<int> part)
-        {
-            List<List<int>> retMatrix = new List<List<int>>();
-            retMatrix.Add(new List<int>());
-            for (int i = 0; i < part.Count; i++)
-                retMatrix[0].Add(part[i]);
-            return retMatrix;   
-        }
         public List<int> Analyse(List<int> plainText, List<int> cipherText)
         {
             ///find a 2 * 2 Matrix such that C.T = P.T * x
             ///Consider the matrix multiplication
             ///CT[0] = Mat[0][0] * P.T[0] + Mat[0][1] * PT[1]
             ///so i have to satisfy that sum(Mat[i][j] * P[j]) = CT[i]
-            if (plainText.Count != cipherText.Count)
+            if (plainText.Count != cipherText.Count || plainText.Count < 2 * 2)
                 throw new InvalidAnlysisException();
-            List<int> Key = new List<int>();
-            bool f = false;
-            for (int i = 0; i < cipherText.Count; i += 2)
+            
+            for(int f1 = 0; f1 < plainText.Count / 2; f1++)
             {
-                if (i + 2 > cipherText.Count) break;
-                List<int> plainPart = new List<int>();
-                List<List<int>> cipherPart = new List<List<int>>();
-                for (int j = 0; j < 2; j++)
+                for(int f2 = f1 + 1; f2 < plainText.Count / 2; f2++)
                 {
-                    cipherPart.Add(new List<int>());
-                    cipherPart[j].Add(cipherText[i + j]);
-                    plainPart.Add(plainText[i+j]);
-                }
-                ///ct = key * pt
-                ///key = ct * pt^-1
-                List<List<int>> plainInversion = getInverseion(plainPart);
-                List<int> append = matrixMul(cipherPart, plainInversion);
-                if (!f)
+                    List<List<int>> P = new List<List<int>>();
+                    List<List<int>> Q = new List<List<int>>();
+                    List<List<int>> inv = new List<List<int>>();
+
+                    for (int i = 0; i < 2; i++)
+                    {
+                        inv.Add(new List<int>());
+                        P.Add(new List<int>());
+                        Q.Add(new List<int>());
+                    }
+                    for(int j = 0; j < 2; j++)
+                    {
+                        P[j].Add(plainText[f1 * 2 + j]);
+                        P[j].Add(plainText[f2 * 2 + j]);
+                        Q[j].Add(cipherText[f1 * 2 + j]);
+                        Q[j].Add(cipherText[f2 * 2 + j]);
+                    }
+
+            int m = 2;
+
+            int r = m;
+            int c = m;
+            int det = 0;
+            for (int i = 0; i < r; i++)
+            {
+                for (int j = 0; j < c; j++)
                 {
-                    Key = append;
-                }   else
-                {
-                    for (int x = 0; x < 4; x++)
-                        if (Key[x] != append[x])
-                            throw new InvalidAnlysisException();
+                    List<List<int>> sendMatrix = new List<List<int>>();
+                    for (int k = 0; k < r - 1; k++)
+                        sendMatrix.Add(new List<int>());
+                    for (int row = 0; row < r; row++)
+                    {
+                        if (row == i) continue;
+                        for (int col = 0; col < c; col++)
+                        {
+                            if (col == j) continue;
+                            sendMatrix[row - (row > i ? 1 : 0)].Add(P[row][col]);
+                        }
+                    }
+                    inv[j].Add((((i + j) % 2 == 1) ? -1 : 1) * solveDeterminant(sendMatrix) % 26);
+                    if (inv[j][i] < 0)
+                        inv[j][i] += 26;
+                    if (i == 0)
+                        det += inv[j][i] * P[i][j];
+                    det %= 26;
+                    if (det < 0)
+                        det += 26;
                 }
             }
-            return Key;
+            ///find the first element such that (26 * j + 1) % (26 - det) == 0
+            ///gcd(det,26) = 1
+            if (det == 0 || gcd(26, det) != 1)
+            {
+                        continue;
+            }
+            int mulInv = -1;
+            for (int i = 0; ; i++)
+            {
+                if ((i * 26 + 1) % (26 - det) == 0)
+                {
+                    mulInv = 26 - (i * 26 + 1) / (26 - det);
+                    break;
+                }
+            }
+            for (int i = 0; i < r; i++)
+            {
+                for (int j = 0; j < c; j++)
+                {
+                    inv[i][j] *= mulInv;
+                    inv[i][j] %= 26;
+                }
+            }
+
+                    return matrixMul(Q, inv);
+                }
+            }
+            throw new InvalidAnlysisException();
         }
 
 
@@ -273,37 +319,94 @@ namespace SecurityLibrary
 
         public List<int> Analyse3By3Key(List<int> plainText, List<int> cipherText)
         {
-            if (plainText.Count != cipherText.Count)
+            if (plainText.Count != cipherText.Count || plainText.Count < 3 * 3)
                 throw new InvalidAnlysisException();
-            List<int> Key = new List<int>(3 * 3);
-            bool f = false;
-            for (int i = 0; i < cipherText.Count; i += 3)
+
+            for (int f1 = 0; f1 < plainText.Count / 3; f1++)
             {
-                if (i + 2 > cipherText.Count) break;
-                List<int> plainPart = new List<int>(3);
-                List<List<int>> cipherPart = new List<List<int>>(3);
-                for (int j = 0; j < 3; j++)
+                for (int f2 = f1 + 1; f2 < plainText.Count / 3; f2++)
                 {
-                    cipherPart[j] = new List<int>(1);
-                    cipherPart[j][0] = cipherText[i + j];
-                    plainPart[j] = plainText[i + j];
-                }
-                ///ct = key * pt
-                ///key = ct * pt^-1
-                List<List<int>> plainInversion = getInverseion(plainPart);
-                List<int> append = matrixMul(cipherPart, plainInversion);
-                if (!f)
-                {
-                    Key = append;
-                }
-                else
-                {
-                    for (int x = 0; x < 9; x++)
-                        if (Key[x] != append[x])
-                            throw new InvalidAnlysisException();
+                    for(int f3 = f2 + 1; f3 < plainText.Count / 3; f3++) { 
+                    List<List<int>> P = new List<List<int>>();
+                    List<List<int>> Q = new List<List<int>>();
+                    List<List<int>> inv = new List<List<int>>();
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        inv.Add(new List<int>());
+                        P.Add(new List<int>());
+                        Q.Add(new List<int>());
+                    }
+                    for (int j = 0; j < 3; j++)
+                    {
+                        P[j].Add(plainText[f1 * 3 + j]);
+                        P[j].Add(plainText[f2 * 3 + j]);
+                        P[j].Add(plainText[f3 * 3 + j]);
+                        Q[j].Add(cipherText[f1 * 3 + j]);
+                        Q[j].Add(cipherText[f2 * 3 + j]);
+                        Q[j].Add(cipherText[f3 * 3 + j]);
+                    }
+
+                    int m = 3;
+
+                    int r = m;
+                    int c = m;
+                    int det = 0;
+                    for (int i = 0; i < r; i++)
+                    {
+                        for (int j = 0; j < c; j++)
+                        {
+                            List<List<int>> sendMatrix = new List<List<int>>();
+                            for (int k = 0; k < r - 1; k++)
+                                sendMatrix.Add(new List<int>());
+                            for (int row = 0; row < r; row++)
+                            {
+                                if (row == i) continue;
+                                for (int col = 0; col < c; col++)
+                                {
+                                    if (col == j) continue;
+                                    sendMatrix[row - (row > i ? 1 : 0)].Add(P[row][col]);
+                                }
+                            }
+                            inv[j].Add((((i + j) % 2 == 1) ? -1 : 1) * solveDeterminant(sendMatrix) % 26);
+                            if (inv[j][i] < 0)
+                                inv[j][i] += 26;
+                            if (i == 0)
+                                det += inv[j][i] * P[i][j];
+                            det %= 26;
+                            if (det < 0)
+                                det += 26;
+                        }
+                    }
+                    ///find the first element such that (26 * j + 1) % (26 - det) == 0
+                    ///gcd(det,26) = 1
+                    if (det == 0 || gcd(26, det) != 1)
+                    {
+                        continue;
+                    }
+                    int mulInv = -1;
+                    for (int i = 0; ; i++)
+                    {
+                        if ((i * 26 + 1) % (26 - det) == 0)
+                        {
+                            mulInv = 26 - (i * 26 + 1) / (26 - det);
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < r; i++)
+                    {
+                        for (int j = 0; j < c; j++)
+                        {
+                            inv[i][j] *= mulInv;
+                            inv[i][j] %= 26;
+                        }
+                    }
+
+                    return matrixMul(Q, inv);
+                    }
                 }
             }
-            return Key;
+            throw new InvalidAnlysisException();
         }
 
     }
