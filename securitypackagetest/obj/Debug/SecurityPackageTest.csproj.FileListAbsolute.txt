@@ -35,3 +35,10 @@ E:\HassanCourses\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPacka
 E:\HassanCourses\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CopyComplete
 E:\HassanCourses\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
 E:\HassanCourses\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
+F:\Security-Algorithms\SecurityPackageTest\bin\Debug\SecurityPackageTest.dll
+F:\Security-Algorithms\SecurityPackageTest\bin\Debug\SecurityPackageTest.pdb
+F:\Security-Algorithms\SecurityPackageTest\bin\Debug\SecurityLibrary.dll
+F:\Security-Algorithms\SecurityPackageTest\bin\Debug\SecurityLibrary.pdb
+F:\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.csprojResolveAssemblyReference.cache
+F:\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
+F:\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb

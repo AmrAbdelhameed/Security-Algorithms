@@ -18,3 +18,8 @@ E:\HassanCourses\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.c
 E:\HassanCourses\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.CoreCompileInputs.cache
 E:\HassanCourses\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.dll
 E:\HassanCourses\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
+F:\Security-Algorithms\SecurityLibrary\bin\Debug\SecurityLibrary.dll
+F:\Security-Algorithms\SecurityLibrary\bin\Debug\SecurityLibrary.pdb
+F:\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.csprojResolveAssemblyReference.cache
+F:\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.dll
+F:\Security-Algorithms\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
