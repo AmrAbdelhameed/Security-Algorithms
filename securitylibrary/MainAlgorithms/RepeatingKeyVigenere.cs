@@ -13,9 +13,9 @@ namespace SecurityLibrary
             Queue<char> Pathfinder = new Queue<char>(); //RepeatedKey Removal
             Queue<char> PathReserve = new Queue<char>();
 
-            bool streak = false;
-            string nonRep = "";
-            string Key = "";
+            bool streak = false;  //Wheather or not the currently parsed character is a part of a repeat
+            string nonRep = ""; //The Key without repeatations
+            string Key = ""; //The key repeated
             string PT = plainText.ToLower();
             string CT = cipherText.ToLower();
             for (int i = 0; i < plainText.Length; i++)
