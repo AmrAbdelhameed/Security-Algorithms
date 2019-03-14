@@ -42,3 +42,10 @@ F:\Security-Algorithms\SecurityPackageTest\bin\Debug\SecurityLibrary.pdb
 F:\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.csprojResolveAssemblyReference.cache
 F:\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
 F:\Security-Algorithms\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
+C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\bin\Debug\SecurityPackageTest.dll
+C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\bin\Debug\SecurityPackageTest.pdb
+C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\bin\Debug\SecurityLibrary.dll
+C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\bin\Debug\SecurityLibrary.pdb
+C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.csprojResolveAssemblyReference.cache
+C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
+C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
