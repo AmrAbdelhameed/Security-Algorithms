@@ -30,6 +30,7 @@ namespace SecurityLibrary
         }
         public List<int> Analyse(string plainText, string cipherText)
         {
+            //WARNING: unreadable Code ahead
             cipherText = cipherText.ToLower();
             Dictionary<char, List<int>> CTAnalysis = new Dictionary<char, List<int>>();
             Dictionary<char, List<int>> PTAnalysis = new Dictionary<char, List<int>>();
@@ -95,7 +96,7 @@ namespace SecurityLibrary
                 }
             }
 
-            for (int a = streak*3; a !=0; a--)
+            for (int a = (plainText.Length/Math.Abs(Depth))+streak; a !=0; a--)
             {
                 int[] Key = new int[a];
                 var tempKey = new List<int>();
@@ -119,7 +120,7 @@ namespace SecurityLibrary
                 if (!Key.Contains(0))
                     return Key.ToList();
             }
-            return new int[streak*3].ToList();
+            return new int[(plainText.Length / Math.Abs(Depth)) + streak].ToList();
             throw new InvalidAnlysisException();
         }
 
