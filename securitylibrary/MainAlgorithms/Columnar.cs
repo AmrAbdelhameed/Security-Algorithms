@@ -8,6 +8,26 @@ namespace SecurityLibrary
 {
     public class Columnar : ICryptographicTechnique<string, List<int>>
     {
+
+        List<string> Columnize(string text,int columnsCount)
+        {
+            List<string> Columns = new List<string>();
+            int ExpectedPadding1 = columnsCount - (text.Length % columnsCount);
+            int curDepth = (text.Length / columnsCount) + 1;
+            int offset = 0;
+            for (int i = 0; i < columnsCount; i++)
+            {
+                if (i == columnsCount - ExpectedPadding1) { curDepth -= 1; }
+                string Column = "";
+                for (int j = 0; j < curDepth; j++)
+                {
+                    Column += text[j + offset];
+                }
+                Columns.Add(Column);
+                offset += curDepth;
+            }
+            return Columns;
+        }
         public List<int> Analyse(string plainText, string cipherText)
         {
             cipherText = cipherText.ToLower();
@@ -74,87 +94,33 @@ namespace SecurityLibrary
                     Depth=delta;
                 }
             }
-            //KeyAssimilation
-            int KeyLength = Math.Abs(plainText.Count() / Depth);
-            List<int> KeyA = new List<int>();
-            List<int> KeyB = new List<int>();
-            for (int i=0;i< KeyLength; i++)
-            {
-                KeyA.Add(i + 1);
-                KeyB.Add(i + 1);
-            }
-            if (KeyA.Count != 1)
-                KeyA.Remove(KeyA.Last());
 
-            string s1 = Encrypt(plainText, KeyA);
-            string s2 = Encrypt(plainText, KeyB);
+            for (int a = streak*3; a !=0; a--)
+            {
+                int[] Key = new int[a];
+                var tempKey = new List<int>();
+                tempKey.AddRange(Enumerable.Range(1, a));
+                string Stemp = Encrypt(plainText, tempKey);
 
-            List<string> CT1 = new List<string>();
-            List<string> Ciphered1 = new List<string>();
-            int ExpectedPadding1 = KeyA.Count - (cipherText.Length % KeyA.Count);
-            int curDepth = (cipherText.Length / KeyA.Count)+1;
-            int offset = 0;
-            for (int i=0;i<KeyA.Count;i++)
-            {
-                if (i == KeyA.Count - ExpectedPadding1) { curDepth -= 1; }
-                string CipherColumn = "";
-                string Column = "";
-                for (int j=0;j<curDepth ; j++)
+                List<string> CT = Columnize(cipherText, a);
+                List<string> CTx = Columnize(Stemp, a);
+
+                for (int i = 0; i < CT.Count; i++)
                 {
-                    CipherColumn += cipherText[j+offset];
-                    Column += s1[j + offset];
-                }
-                CT1.Add(CipherColumn);
-                Ciphered1.Add(Column);
-                offset += curDepth;
-            }
-            int[] Key = new int[KeyLength*2-1];
-            for (int i=0;i<CT1.Count;i++)
-            {
-                for (int j=0;j<Ciphered1.Count;j++)
-                {
-                    if (CT1[i] == Ciphered1[j])
+                    for (int j = 0; j < CTx.Count; j++)
                     {
-                        Key[j] = i+1;
+                        if (CT[i] == CTx[j])
+                        {
+                            Key[j] = i + 1;
+                        }
                     }
                 }
-            }
 
-            if (!Key.Contains(0))
-                return Key.ToList();
-
-            List<string> CT2 = new List<string>();
-            List<string> Ciphered2 = new List<string>();
-            int ExpectedPadding2 = KeyB.Count - (cipherText.Length % KeyB.Count);
-            curDepth = (cipherText.Length / KeyB.Count) + 1;
-            offset = 0;
-            for (int i = 0; i < KeyB.Count; i++)
-            {
-                if (i == KeyB.Count - ExpectedPadding2) { curDepth -= 1; }
-                string CipherColumn = "";
-                string Column = "";
-                for (int j = 0; j < curDepth; j++)
-                {
-                    CipherColumn += cipherText[j + offset];
-                    Column += s2[j + offset];
-                }
-                CT2.Add(CipherColumn);
-                Ciphered2.Add(Column);
-                offset += curDepth;
+                if (!Key.Contains(0))
+                    return Key.ToList();
             }
-            Key = new int[KeyLength*2];
-            for (int i = 0; i < CT2.Count; i++)
-            {
-                for (int j = 0; j < Ciphered2.Count; j++)
-                {
-                    if (CT2[i] == Ciphered2[j])
-                    {
-                        Key[j] = i + 1;
-                    }
-                }
-            }
-
-            return Key.ToList();
+            return new int[streak*3].ToList();
+            throw new InvalidAnlysisException();
         }
 
         public string Decrypt(string cipherText, List<int> key)
