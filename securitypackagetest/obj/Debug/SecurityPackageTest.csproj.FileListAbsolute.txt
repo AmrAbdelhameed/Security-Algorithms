@@ -49,3 +49,10 @@ C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Proje
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.csprojResolveAssemblyReference.cache
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
+C:\Users\Moataz\ATLAS Root Directory\Live Folders\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\bin\Debug\SecurityPackageTest.dll
+C:\Users\Moataz\ATLAS Root Directory\Live Folders\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\bin\Debug\SecurityPackageTest.pdb
+C:\Users\Moataz\ATLAS Root Directory\Live Folders\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\bin\Debug\SecurityLibrary.dll
+C:\Users\Moataz\ATLAS Root Directory\Live Folders\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\bin\Debug\SecurityLibrary.pdb
+C:\Users\Moataz\ATLAS Root Directory\Live Folders\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.csprojResolveAssemblyReference.cache
+C:\Users\Moataz\ATLAS Root Directory\Live Folders\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
+C:\Users\Moataz\ATLAS Root Directory\Live Folders\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
