@@ -96,26 +96,25 @@ namespace SecurityLibrary.AES
             return Sbox.inverseSBox[i * 16 + j];
         }
 
-        private byte GalioModuleMul(byte a, byte b)
+        private byte GalioModuleMul(byte A, byte B)
         {
-            byte p = 0;
+            byte outBound = 0;
             for (int i = 0; i < 8; i++)
             {
-                if ((b & 1) != 0)
+                if ((B & 1) != 0)
                 {
-                    p ^= a;
+                    outBound ^= A;
                 }
-                bool carry = (a & 0x80) != 0; //Wheather the first byte is 1
+                bool carry = (A & 0x80) != 0; //Wheather the first byte is 1
                                               //Anding with 10000000 then comparing to 0
-                a <<= 1;
-
+                A <<= 1;
                 if (carry)
                 {
-                    a ^= 0x1B;
+                    A ^= 0x1B;
                 }
-                b >>= 1;
+                B >>= 1;
             }
-           return p;
+           return outBound;
         }
 
         public byte[][] MixColumns(byte[][] Columns)

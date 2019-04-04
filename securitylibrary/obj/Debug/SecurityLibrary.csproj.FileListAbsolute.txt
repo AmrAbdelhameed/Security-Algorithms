@@ -2,3 +2,4 @@ C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Proje
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityLibrary\bin\Debug\SecurityLibrary.pdb
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityLibrary\obj\Debug\SecurityLibrary.dll
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
+C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityLibrary\obj\Debug\SecurityLibrary.csprojResolveAssemblyReference.cache
