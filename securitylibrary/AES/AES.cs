@@ -55,7 +55,6 @@ namespace SecurityLibrary.AES
         }
 
         byte[,] Key = new byte[4, 4];
-        byte[,] KeyExpanded = new byte[4, 44];
 
         void parse(string input,ref byte[,] Entry)
         {
@@ -69,10 +68,7 @@ namespace SecurityLibrary.AES
             }
         }
 
-        public static readonly byte[] rcon =
-        {
-            0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1b,0x36
-        };
+        public static readonly byte[] rcon = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1b,0x36};
 
         byte substitute(int entry)
         {
@@ -87,30 +83,33 @@ namespace SecurityLibrary.AES
             return Sbox.sBox[i*16+j];
         }
 
-        byte[] _44x41_MatrixMultiply(byte[,] Matrix,byte[] Vector)
+        byte substituteInv(int entry)
         {
-            byte[] outBound = new byte[4];
-            for (int i = 0; i < 4; i++)
-            {
-                outBound[i] = 0;
-                for (int j=0;j<4;j++)
-                    outBound[i] ^= GalioModuleMul(Matrix[j, i] , Vector[j]);
-            }
-            return outBound;
+            string hex = Convert.ToString(entry, 16);
+            hex = hex.Replace("0x", "").Replace("x", "");
+            int i;
+            if (hex.Length == 2)
+                i = Convert.ToInt32(hex.Substring(0, hex.Length / 2), 16);
+            else
+                i = 0;
+            int j = Convert.ToInt32(hex.Substring(hex.Length / 2, Math.Max((hex.Length / 2), 1)), 16);
+            return Sbox.inverseSBox[i * 16 + j];
         }
 
         private byte GalioModuleMul(byte a, byte b)
         {
             byte p = 0;
-            for (int counter = 0; counter < 8; counter++)
+            for (int i = 0; i < 8; i++)
             {
                 if ((b & 1) != 0)
                 {
                     p ^= a;
                 }
-                bool hi_bit_set = (a & 0x80) != 0;
+                bool carry = (a & 0x80) != 0; //Wheather the first byte is 1
+                                              //Anding with 10000000 then comparing to 0
                 a <<= 1;
-                if (hi_bit_set)
+
+                if (carry)
                 {
                     a ^= 0x1B;
                 }
@@ -120,7 +119,12 @@ namespace SecurityLibrary.AES
         }
 
         public byte[][] MixColumns(byte[][] Columns)
-        { // 's' is the main State matrix, 'ss' is a temp matrix of the same dimensions as 's'.
+        {
+            //Mixing Matrix
+            //2     3       1       1
+            //1     2       3       1
+            //1     1       2       3
+            //3     1       1       2
             byte[][] OutBound = new byte[4][];
             OutBound[0] = new byte[4] { 0, 0, 0, 0 };
             OutBound[1] = new byte[4] { 0, 0, 0, 0 };
@@ -128,29 +132,78 @@ namespace SecurityLibrary.AES
             OutBound[3] = new byte[4] { 0, 0, 0, 0 };
             for (int c = 0; c < 4; c++)
             {
-                OutBound[0][c] = (byte)(GalioModuleMul(0x02, Columns[0][c]) ^ GalioModuleMul(0x03, Columns[1][c]) ^ Columns[2][c] ^ Columns[3][c]);
-                OutBound[1][c] = (byte)(Columns[0][c] ^ GalioModuleMul(0x02, Columns[1][c]) ^ GalioModuleMul(0x03, Columns[2][c]) ^ Columns[3][c]);
-                OutBound[2][c] = (byte)(Columns[0][c] ^ Columns[1][c] ^ GalioModuleMul(0x02, Columns[2][c]) ^ GalioModuleMul(0x03, Columns[3][c]));
-                OutBound[3][c] = (byte)(GalioModuleMul(0x03, Columns[0][c]) ^ Columns[1][c] ^ Columns[2][c] ^ GalioModuleMul(0x02, Columns[3][c]));
+                OutBound[0][c] = (byte)(GalioModuleMul(0x02, Columns[0][c]) ^
+                    GalioModuleMul(0x03, Columns[1][c]) ^
+                    GalioModuleMul(0x01,Columns[2][c]) ^
+                    GalioModuleMul(0x01,Columns[3][c]));
+                OutBound[1][c] = (byte)(GalioModuleMul(0x01, Columns[0][c]) ^
+                    GalioModuleMul(0x02, Columns[1][c]) ^
+                    GalioModuleMul(0x03, Columns[2][c]) ^
+                    GalioModuleMul(0x01, Columns[3][c]));
+                OutBound[2][c] = (byte)(GalioModuleMul(0x01, Columns[0][c]) ^
+                    GalioModuleMul(0x01, Columns[1][c]) ^
+                    GalioModuleMul(0x02, Columns[2][c]) ^
+                    GalioModuleMul(0x03, Columns[3][c]));
+                OutBound[3][c] = (byte)(GalioModuleMul(0x03, Columns[0][c]) ^
+                    GalioModuleMul(0x01, Columns[1][c]) ^
+                    GalioModuleMul(0x01, Columns[2][c]) ^
+                    GalioModuleMul(0x02, Columns[3][c]));
 
             }
             return OutBound;
+        }
 
+        public byte[][] unMixColumns(byte[][] Columns)
+        {
+            //unMixing Matrix
+            //e     b       d       9
+            //9     e       b       d
+            //d     9       e       b
+            //b     d       9       e
+            byte[][] OutBound = new byte[4][];
+            OutBound[0] = new byte[4] { 0, 0, 0, 0 };
+            OutBound[1] = new byte[4] { 0, 0, 0, 0 };
+            OutBound[2] = new byte[4] { 0, 0, 0, 0 };
+            OutBound[3] = new byte[4] { 0, 0, 0, 0 };
+            for (int c = 0; c < 4; c++)
+            {
+                OutBound[0][c] = (byte)(GalioModuleMul(0x0e, Columns[0][c]) ^ 
+                    GalioModuleMul(0x0b, Columns[1][c]) ^ 
+                    GalioModuleMul(0x0d,Columns[2][c]) ^ 
+                    GalioModuleMul(0x09,Columns[3][c]));
+                OutBound[1][c] = (byte)(GalioModuleMul(0x09,Columns[0][c]) ^ 
+                    GalioModuleMul(0x0e, Columns[1][c]) ^ 
+                    GalioModuleMul(0x0b, Columns[2][c]) ^
+                    GalioModuleMul(0x0d,Columns[3][c]));
+                OutBound[2][c] = (byte)(GalioModuleMul(0x0d, Columns[0][c]) ^
+                    GalioModuleMul(0x09, Columns[1][c]) ^
+                    GalioModuleMul(0x0e, Columns[2][c]) ^
+                    GalioModuleMul(0x0b, Columns[3][c]));
+                OutBound[3][c] = (byte)(GalioModuleMul(0x0b, Columns[0][c]) ^
+                    GalioModuleMul(0x0d, Columns[1][c]) ^
+                    GalioModuleMul(0x09, Columns[2][c]) ^
+                    GalioModuleMul(0x0e, Columns[3][c]));
+            }
+            return OutBound;
         }
 
         public byte[,] FGenerateRoundKey(byte[,] Key0,int round)
         {
             byte[,] Key1 = new byte[4, 4];
+
+            //Rotating and substitution single step
             Key1[0, 0] = substitute(Key0[1, 3]);
             Key1[1, 0] = substitute(Key0[2, 3]);
             Key1[2, 0] = substitute(Key0[3, 3]);
             Key1[3, 0] = substitute(Key0[0, 3]);
 
+            //XOR with Round Constant
             Key1[0, 0] = (byte)(Key1[0, 0]^Key0[0, 0]^rcon[round-1]);
             Key1[1, 0] = (byte)(Key1[1, 0]^Key0[1, 0]^0x0);
             Key1[2, 0] = (byte)(Key1[2, 0]^Key0[2, 0]^0x0);
             Key1[3, 0] = (byte)(Key1[3, 0]^Key0[3, 0]^0x0);
 
+            //XORing with correspodning columns
             for (int i = 1;i<4;i++)
             {
                 Key1[0, i] = (byte)(Key1[0, i-1] ^ Key0[0, i]);
@@ -162,35 +215,8 @@ namespace SecurityLibrary.AES
             return Key1;
         }
 
-        void ExpandFullKey()
-        {
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    KeyExpanded[i, j] = Key[i, j];
-
-            for (int i= 0;i<10;i++)
-            {
-                for (int j=0;j<4;j++)
-                {
-                    int ix = i * 4 + j+4;
-                    if (j%4==0)
-                    {
-                        KeyExpanded[0, ix] = (byte)(substitute(KeyExpanded[1, ix - 1]) ^ KeyExpanded[0, ix-4] ^ rcon[i]);
-                        KeyExpanded[1, ix] = (byte)(substitute(KeyExpanded[2, ix - 1]) ^ KeyExpanded[0, ix-4]);
-                        KeyExpanded[2, ix] = (byte)(substitute(KeyExpanded[3, ix - 1]) ^ KeyExpanded[0, ix-4]);
-                        KeyExpanded[3, ix] = (byte)(substitute(KeyExpanded[0, ix - 1]) ^ KeyExpanded[0, ix-4]);
-                    }
-                    else
-                    {
-                        KeyExpanded[0, ix] = (byte)(KeyExpanded[0, ix - 1] ^ KeyExpanded[0, ix - 4]);
-                        KeyExpanded[1, ix] = (byte)(KeyExpanded[1, ix - 1] ^ KeyExpanded[0, ix - 4]);
-                        KeyExpanded[2, ix] = (byte)(KeyExpanded[2, ix - 1] ^ KeyExpanded[0, ix - 4]);
-                        KeyExpanded[3, ix] = (byte)(KeyExpanded[3, ix - 1] ^ KeyExpanded[0, ix - 4]);
-                    }
-                }
-            }
-        }
-
+        //Used mainly for debugging
+        //changes the byte arrays to understandable hexadecimal
         string fromArrtoStr(byte[,] input)
         {
             string outBound = "";
@@ -202,12 +228,111 @@ namespace SecurityLibrary.AES
 
         public override string Decrypt(string cipherText, string key)
         {
-            return null;
+            key = key.ToLower();
+            cipherText = cipherText.Replace("0x", "").ToLower();
+            int deciphered = 0;
+            parse(key, ref Key);
+            byte[][,] Keys = new byte[11][,];
+            Keys[0] = Key;
+            for (int i=1;i<11;i++)
+            {
+                Keys[i] = FGenerateRoundKey(Keys[i - 1], i);
+            }
+            string outBound = "0x";
+            while (deciphered < cipherText.Length)
+            {
+                byte[,] block = new byte[4, 4];
+                parse(cipherText.Substring(0, 32), ref block);
+                deciphered += 32;
+                byte[,] CipheredClass=new byte[4,4];
+                byte[][] ColumnsMixed;
+                byte[][] RowsShifted;
+                byte[,] subCiphered;
+
+                //debug
+                string RoundOut;
+
+                //Intial Addition
+                for (int i = 0; i < 4; i++)
+                {
+                    block[0, i] = (byte)(block[0, i] ^ Keys[10][0, i]);
+                    block[1, i] = (byte)(block[1, i] ^ Keys[10][1, i]);
+                    block[2, i] = (byte)(block[2, i] ^ Keys[10][2, i]);
+                    block[3, i] = (byte)(block[3, i] ^ Keys[10][3, i]);
+                }
+                RoundOut = fromArrtoStr(block);
+                //itirative
+                for (int round = 9; round >=0; round--)
+                {
+                    //byte substitution
+                    subCiphered = new byte[4, 4];
+                    for (int i = 0; i < 4; i++)
+                        for (int j = 0; j < 4; j++)
+                            subCiphered[i, j] = substituteInv(block[i, j]);
+
+                    RowsShifted = new byte[4][];
+                    //Shift Rows
+                    for (int i = 0; i < 4; i++)
+                    {
+                        RowsShifted[i] = new byte[4];
+                        RowsShifted[i][0] = subCiphered[i, (4-i) % 4];
+                        RowsShifted[i][1] = subCiphered[i, (5-i) % 4];
+                        RowsShifted[i][2] = subCiphered[i, (6-i) % 4];
+                        RowsShifted[i][3] = subCiphered[i, (7-i) % 4];
+
+                    }
+
+                    CipheredClass = new byte[4, 4];
+
+                    //Adding Round Key
+                    for (int i = 0; i < 4; i++)
+                    {
+                        CipheredClass[0, i] = (byte)(RowsShifted[0][i] ^ Keys[round][0,i]);
+                        CipheredClass[1, i] = (byte)(RowsShifted[1][i] ^ Keys[round][1,i]);
+                        CipheredClass[2, i] = (byte)(RowsShifted[2][i] ^ Keys[round][2,i]);
+                        CipheredClass[3, i] = (byte)(RowsShifted[3][i] ^ Keys[round][3,i]);
+                    }
+                    string beforeMix = fromArrtoStr(CipheredClass);
+
+                    byte[][] preMix = new byte[4][];
+                    preMix[0] = new byte[4];
+                    preMix[1] = new byte[4];
+                    preMix[2] = new byte[4];
+                    preMix[3] = new byte[4];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        preMix[0][i]=CipheredClass[0, i];
+                        preMix[1][i]=CipheredClass[1, i];
+                        preMix[2][i]=CipheredClass[2, i];
+                        preMix[3][i]=CipheredClass[3, i];
+                    }
+
+                    //Unmixing Columns
+                    if (round != 0)
+                        ColumnsMixed = unMixColumns(preMix);
+                    else
+                        ColumnsMixed = preMix;
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        CipheredClass[0, i]= ColumnsMixed[0][i];
+                        CipheredClass[1, i]= ColumnsMixed[1][i];
+                        CipheredClass[2, i]= ColumnsMixed[2][i];
+                        CipheredClass[3, i] = ColumnsMixed[3][i];
+                    }
+                    RoundOut = fromArrtoStr(CipheredClass);
+                    block = CipheredClass;
+                }
+                //serializing and realigning output
+                for (int i = 0; i < 4; i++)
+                    for (int j = 0; j < 4; j++)
+                        outBound += CipheredClass[j, i].ToString("X").PadLeft(2, '0');
+            }
+            return outBound;
         }
 
         public override string Encrypt(string plainText, string key)
         {
-
             key = key.ToLower();
             plainText = plainText.Replace("0x", "").ToLower();
             int ciphered = 0;
@@ -218,7 +343,6 @@ namespace SecurityLibrary.AES
                 byte[,] block = new byte[4, 4];
                 parse(plainText.Substring(0, 32), ref block);
                 ciphered += 32;
-                ExpandFullKey();
 
                 //FirstRound
                 byte[,] Key1 = FGenerateRoundKey(Key, 1);
@@ -231,7 +355,7 @@ namespace SecurityLibrary.AES
                     block[3, i] = (byte)(block[3,i] ^ Key[3, i]);
                 }
 
-                string inputToRound = fromArrtoStr(block);
+                string inputToRound = fromArrtoStr(block); //debug variables
 
                 //byte substitution
                 byte[,] subCiphered = new byte[4, 4];
@@ -307,6 +431,7 @@ namespace SecurityLibrary.AES
                     RoundOut = fromArrtoStr(CipheredClass);
                 }
 
+                //serializing and realigning output
                 for (int i = 0; i < 4; i++)
                     for (int j = 0; j < 4; j++)
                         outBound += CipheredClass[j, i].ToString("X").PadLeft(2,'0');
