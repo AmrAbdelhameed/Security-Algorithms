@@ -3,3 +3,8 @@ C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Proje
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityLibrary\obj\Debug\SecurityLibrary.dll
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityLibrary\obj\Debug\SecurityLibrary.csprojResolveAssemblyReference.cache
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityLibrary\bin\Debug\SecurityLibrary.dll
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityLibrary\bin\Debug\SecurityLibrary.pdb
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csprojResolveAssemblyReference.cache
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.dll
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.pdb

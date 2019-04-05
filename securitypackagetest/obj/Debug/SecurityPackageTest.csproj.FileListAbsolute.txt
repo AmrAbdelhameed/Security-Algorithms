@@ -5,3 +5,10 @@ C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Proje
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.csprojResolveAssemblyReference.cache
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
 C:\Users\Moataz\College Work\Active Directory\Semester 2\Computer Security\Projects\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityPackageTest\bin\Debug\SecurityPackageTest.dll
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityPackageTest\bin\Debug\SecurityPackageTest.pdb
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityPackageTest\bin\Debug\SecurityLibrary.dll
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityPackageTest\bin\Debug\SecurityLibrary.pdb
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csprojResolveAssemblyReference.cache
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
+D:\_FCIS\Sna 4\Semester 2\Computer Security\Labs\Lab 1\SecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
