@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +18,9 @@ namespace SecurityLibrary.RC4
 
         public override  string Encrypt(string plainText, string key)
         {
+	    
             bool flag = false;
+	    ///Converting from Hexadecimal to decimal
             if (plainText[1] == 'x' && plainText[0] == '0')
             {
                 flag = true;
@@ -35,7 +37,7 @@ namespace SecurityLibrary.RC4
                     tmpK += char.ConvertFromUtf32(Convert.ToInt32(key[i].ToString() + key[i + 1].ToString(), 16));
                 key = tmpK;
             }
-
+	    ///Initalizing S and T
             int[] S = new int[256];
             int[] T = new int[256];
             for (int i = 0; i < 256; i++)
@@ -43,7 +45,7 @@ namespace SecurityLibrary.RC4
                 S[i] = i;
                 T[i] = key[i % key.Length];
             }
-
+	    ///Initalize permuatation of S
             int j = 0;
             for (int i = 0; i < 256; i++)
             {
@@ -57,6 +59,7 @@ namespace SecurityLibrary.RC4
             int plLength = plainText.Length;
             int t;
             string C = "";
+	    ///Key stream generation
             for (int i = 0; i < plainText.Length; i++)
             {
                 a = (a + 1) % 256;
@@ -68,9 +71,10 @@ namespace SecurityLibrary.RC4
                 t = (S[a] + S[l]) % 256;
                 k = S[t];
                 Console.WriteLine(plainText[i].ToString() + k.ToString());
+		///Encryption
                 C += char.ConvertFromUtf32((plainText[i] ^ k));
             }
-
+	    ///Reconvert to hexa
             if (flag)
             {
                 C = string.Join("", C.Select(c => ((int)c).ToString("x2")));
